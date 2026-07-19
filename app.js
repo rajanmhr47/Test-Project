@@ -774,6 +774,7 @@
       e.stopPropagation();
       var page = this.closest('.nav-submenu').querySelector('.nav-item').dataset.page;
       var subpage = this.dataset.subpage;
+      if (isMobile()) closeSidebar();
       navigateTo(page, subpage);
     });
   });
@@ -798,21 +799,35 @@
     document.getElementById('email').value = 'admin@pharmacy.com';
     document.getElementById('password').value = '';
   }
-  document.getElementById('logout-btn').addEventListener('click', logout);
+  document.getElementById('logout-btn').addEventListener('click', function() { if (isMobile()) closeSidebar(); logout(); });
 
-  /* ================ Sidebar Collapse Toggle ================ */
-  document.getElementById('menu-toggle').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
-    document.getElementById('desktop-content').classList.toggle('collapsed');
-  });
-
-  /* ================ Mobile Responsive ================ */
+  /* ================ Sidebar Toggle (desktop collapse / mobile overlay) ================ */
   function isMobile() { return window.innerWidth <= 767; }
-  function handleResize() {
+  function toggleSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('mobile-overlay');
     if (isMobile()) {
-      document.getElementById('sidebar').classList.add('collapsed');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+    } else {
+      sidebar.classList.toggle('collapsed');
+      document.getElementById('desktop-content').classList.toggle('collapsed');
     }
   }
-  window.addEventListener('resize', handleResize);
+  function closeSidebar() {
+    if (isMobile()) {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('mobile-overlay').classList.add('hidden');
+    }
+  }
+  document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
+  document.getElementById('mobile-overlay').addEventListener('click', closeSidebar);
+
+  // Close mobile sidebar on nav click
+  document.querySelectorAll('.nav-item').forEach(function(el) {
+    el.addEventListener('click', function() {
+      if (isMobile()) closeSidebar();
+    });
+  });
 
 })();

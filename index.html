@@ -1,10 +1,193 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pharmacy Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hello World!</h1>
+  <div id="app">
+    <!-- Login Screen -->
+    <div id="login-screen">
+      <div class="login-container">
+        <mat-card class="login-card">
+          <mat-card-header>
+            <mat-card-title>Pharmacy Manager</mat-card-title>
+            <mat-card-subtitle>Sign in to your account</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <form id="login-form">
+              <div class="form-field">
+                <label>Email</label>
+                <div class="input-wrapper">
+                  <input type="email" id="email" value="admin@pharmacy.com" placeholder="admin@pharmacy.com">
+                </div>
+                <div class="field-error hidden" id="email-error">Email is required</div>
+              </div>
+              <div class="form-field">
+                <label>Password</label>
+                <div class="input-wrapper">
+                  <input type="password" id="password" value="admin123" placeholder="Enter password">
+                </div>
+                <div class="field-error hidden" id="pass-error">Password is required</div>
+              </div>
+              <div id="login-error" class="error-message hidden"></div>
+              <button type="submit" class="mat-raised-button mat-primary" id="login-btn">
+                <span id="login-btn-text">Sign In</span>
+              </button>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="main-app" class="hidden">
+      <!-- Top Toolbar -->
+      <mat-toolbar color="primary" class="top-toolbar">
+        <button class="toolbar-menu-btn" id="menu-toggle" aria-label="Toggle menu">
+          <span class="material-icons">menu</span>
+        </button>
+        <span class="toolbar-title">Pharmacy Manager</span>
+        <span class="toolbar-spacer"></span>
+        <span class="toolbar-indicator" id="health-indicator">
+          <span class="material-icons" style="color:#4caf50;font-size:18px;">check_circle</span>
+        </span>
+        <span class="api-version">API v1.0</span>
+        <span class="toolbar-divider"></span>
+        <button class="toolbar-user-btn" id="user-menu-btn">
+          <span class="material-icons">account_circle</span>
+          <span class="user-email" id="user-email">admin@pharmacy.com</span>
+          <span class="material-icons" style="font-size:18px;">arrow_drop_down</span>
+        </button>
+      </mat-toolbar>
+
+      <!-- Desktop Layout -->
+      <div class="app-layout" id="app-layout">
+        <!-- Sidebar -->
+        <aside class="desktop-sidebar" id="sidebar">
+          <nav class="sidebar-nav">
+            <a class="nav-item active" data-page="dashboard">
+              <span class="material-icons nav-icon">dashboard</span>
+              <span class="nav-label">Dashboard</span>
+            </a>
+            <a class="nav-item" data-page="inventory">
+              <span class="material-icons nav-icon">inventory_2</span>
+              <span class="nav-label">Inventory</span>
+            </a>
+            <a class="nav-item" data-page="products">
+              <span class="material-icons nav-icon">medication</span>
+              <span class="nav-label">Products</span>
+            </a>
+            <a class="nav-item" data-page="transactions">
+              <span class="material-icons nav-icon">swap_vert</span>
+              <span class="nav-label">Transactions</span>
+            </a>
+            <a class="nav-item" data-page="pos">
+              <span class="material-icons nav-icon">point_of_sale</span>
+              <span class="nav-label">POS</span>
+            </a>
+            <a class="nav-item" data-page="sales">
+              <span class="material-icons nav-icon">receipt</span>
+              <span class="nav-label">Sales</span>
+            </a>
+            <a class="nav-item" data-page="purchase-orders">
+              <span class="material-icons nav-icon">receipt_long</span>
+              <span class="nav-label">Purchase Orders</span>
+            </a>
+            <a class="nav-item" data-page="suppliers">
+              <span class="material-icons nav-icon">business</span>
+              <span class="nav-label">Suppliers</span>
+            </a>
+            <a class="nav-item" data-page="customers">
+              <span class="material-icons nav-icon">people</span>
+              <span class="nav-label">Customers</span>
+            </a>
+            <a class="nav-item" data-page="prescriptions">
+              <span class="material-icons nav-icon">medication</span>
+              <span class="nav-label">Prescriptions</span>
+            </a>
+            <a class="nav-item" data-page="returns">
+              <span class="material-icons nav-icon">assignment_return</span>
+              <span class="nav-label">Returns</span>
+            </a>
+
+            <!-- Reports with submenu -->
+            <div class="nav-submenu">
+              <a class="nav-item" data-page="reports">
+                <span class="material-icons nav-icon">assessment</span>
+                <span class="nav-label">Reports</span>
+                <span class="material-icons arrow-right">chevron_right</span>
+              </a>
+              <div class="submenu-items" id="reports-submenu">
+                <a class="submenu-item" data-subpage="medicine-wise-sales"><span class="material-icons sub-icon">medication</span> Medicine-Wise Sales</a>
+                <a class="submenu-item" data-subpage="sales-report"><span class="material-icons sub-icon">bar_chart</span> Sales Report</a>
+                <a class="submenu-item" data-subpage="financial"><span class="material-icons sub-icon">account_balance</span> Financial Summary</a>
+                <a class="submenu-item" data-subpage="inventory-valuation"><span class="material-icons sub-icon">inventory</span> Inventory Valuation</a>
+                <a class="submenu-item" data-subpage="profit-loss"><span class="material-icons sub-icon">analytics</span> Profit &amp; Loss</a>
+                <a class="submenu-item" data-subpage="expiry-forecast"><span class="material-icons sub-icon">calendar_month</span> Expiry Forecast</a>
+                <a class="submenu-item" data-subpage="top-selling"><span class="material-icons sub-icon">trending_up</span> Top / Least Selling</a>
+                <a class="submenu-item" data-subpage="tax-report"><span class="material-icons sub-icon">receipt_long</span> Tax Report</a>
+              </div>
+            </div>
+
+            <div class="nav-divider"></div>
+
+            <a class="nav-item" data-page="audit-logs">
+              <span class="material-icons nav-icon">history</span>
+              <span class="nav-label">System Logs</span>
+            </a>
+
+            <!-- Settings with submenu -->
+            <div class="nav-submenu">
+              <a class="nav-item" data-page="settings">
+                <span class="material-icons nav-icon">settings</span>
+                <span class="nav-label">Settings</span>
+                <span class="material-icons arrow-right">chevron_right</span>
+              </a>
+              <div class="submenu-items" id="settings-submenu">
+                <a class="submenu-item" data-subpage="pharmacy-info"><span class="material-icons sub-icon">store</span> Pharmacy Info</a>
+                <a class="submenu-item" data-subpage="tax-config"><span class="material-icons sub-icon">percent</span> Tax Config</a>
+                <a class="submenu-item" data-subpage="coupons"><span class="material-icons sub-icon">redeem</span> Coupons</a>
+                <a class="submenu-item" data-subpage="backup"><span class="material-icons sub-icon">backup</span> Backup &amp; Restore</a>
+              </div>
+            </div>
+          </nav>
+
+          <div class="sidebar-footer">
+            <button id="logout-btn" class="logout-btn">
+              <span class="material-icons">logout</span>
+              <span class="nav-label">Logout</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="desktop-content" id="desktop-content">
+          <div class="page-container" id="content-area">
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button class="modal-close-btn" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer">
+        <button class="mat-stroked-button" id="modal-cancel">Cancel</button>
+        <button class="mat-raised-button mat-primary" id="modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
